@@ -17,7 +17,7 @@
         android:id="@+id/bottomNativationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_light"
+        android:background="@color/colorPink"
         app:itemIconTint="@color/colorPrimaryDark"
         app:itemTextColor="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
