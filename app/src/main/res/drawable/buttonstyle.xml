@@ -3,6 +3,6 @@
     android:shape="rectangle">
     <!--  Gradient Bg for listrow -->
     <corners android:radius="20dp"/>
-        <solid android:color="@color/primary_light"/>
+        <solid android:color="@color/colorPink"/>
 
 </shape>
