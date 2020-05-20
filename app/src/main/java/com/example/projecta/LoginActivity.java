@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +28,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvRegisterButton, tvForgetButton;
+    private ProgressBar progressBarLogin;
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        // Si el usuario ya está logueado lo redigirá a la actividad principal.
+        if (firebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -41,8 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         tvRegisterButton = findViewById(R.id.tvRegisterButton);
         tvForgetButton = findViewById(R.id.tvForgetButton);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        
+        progressBarLogin = findViewById(R.id.progressBarLogin);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,30 +59,36 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
-                    etEmail.setError("Email is required");
+                    etEmail.setError("Es necesario ingresar un correo electrónico.");
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    etPassword.setError("Password is required");
+                    etPassword.setError("Es necesario ingresar una contraseña.");
                     return;
                 }
 
                 if (password.length() < 6) {
-                    etPassword.setError("Password must be more than 6 characters");
+                    etPassword.setError("La contraseña debe contener más de 6 caracteres.");
                     return;
                 }
-                
+
+                progressBarLogin.setVisibility(View.VISIBLE);
+
                 firebaseAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Logged in successfully",
+                            Toast.makeText(LoginActivity.this, "Se ha iniciado sesión correctamente.",
                                     Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                            finish();
+
                         } else {
-                            Toast.makeText(LoginActivity.this, "Error has ocurred: " +
+                            Toast.makeText(LoginActivity.this,
                                     task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBarLogin.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -83,7 +98,8 @@ public class LoginActivity extends AppCompatActivity {
         tvRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                finish();
             }
         });
 
