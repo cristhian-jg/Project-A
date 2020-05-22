@@ -1,4 +1,4 @@
-package com.example.projecta;
+package com.example.projecta.loginin.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projecta.loginin.EditProfileActivity;
+import com.example.projecta.init.LoginActivity;
+import com.example.projecta.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

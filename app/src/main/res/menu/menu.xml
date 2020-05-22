@@ -11,8 +11,8 @@
         android:icon="@drawable/baseline_perm_identity_white_18dp">
     </item>
 
-    <item android:id="@+id/menu_list"
-        android:title="Opciones"
-        android:icon="@drawable/baseline_settings_white_18dp">
+    <item android:id="@+id/menu_navegation"
+        android:title="Navegador"
+        android:icon="@drawable/baseline_navigation_white_18dp">
     </item>
 </menu>

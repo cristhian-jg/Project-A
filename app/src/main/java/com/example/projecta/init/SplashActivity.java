@@ -1,12 +1,13 @@
-package com.example.projecta;
+package com.example.projecta.init;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+
+import com.example.projecta.R;
 
 /**
  * Clase que se ejecuta siempre que se inicia o se vuelve a la aplicación, muestra

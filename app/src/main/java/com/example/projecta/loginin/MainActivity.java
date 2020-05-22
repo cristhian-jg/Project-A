@@ -1,4 +1,4 @@
-package com.example.projecta;
+package com.example.projecta.loginin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.projecta.R;
+import com.example.projecta.loginin.fragments.HomeFragment;
+import com.example.projecta.loginin.fragments.NavegadorFragment;
+import com.example.projecta.loginin.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
@@ -43,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menu_profile:
                         fragment = new ProfileFragment();
                         break;
-                    case R.id.menu_list:
-                        fragment = new ListaFragment();
+                    case R.id.menu_navegation:
+                        fragment = new NavegadorFragment();
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
