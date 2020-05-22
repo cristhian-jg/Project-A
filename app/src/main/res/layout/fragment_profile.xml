@@ -7,7 +7,7 @@
     android:background="@drawable/profilebackground">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/civAvatarConfig"
+        android:id="@+id/civAvatar"
         android:layout_width="153dp"
         android:layout_height="147dp"
         android:src="@drawable/logo"
@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.027" />
 
     <TextView
-        android:id="@+id/tvTelefono"
+        android:id="@+id/tvPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+34 677 20 47 12"
@@ -35,7 +35,7 @@
         app:layout_constraintVertical_bias="0.589" />
 
     <TextView
-        android:id="@+id/tvNombre"
+        android:id="@+id/tvName"
         android:layout_width="148dp"
         android:layout_height="wrap_content"
         android:text="Cristhian González"
@@ -141,7 +141,7 @@
         app:layout_constraintVertical_bias="0.316" />
 
     <Button
-        android:id="@+id/btnChangeProfileImage"
+        android:id="@+id/btnChangeProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"

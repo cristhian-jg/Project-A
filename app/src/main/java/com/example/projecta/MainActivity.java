@@ -9,7 +9,14 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Actividad principal la cual está divida en 3 fragmentos, además implementa un navegador en la parte
+ * inferior de la aplicación para navegador entre los fragmentos.
+ */
+
 public class MainActivity extends AppCompatActivity {
+
+    private final static String TAG = "MainActivity";
 
     private BottomNavigationView bottomNavigationView;
 
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.menu_profile:
                         fragment = new ProfileFragment();
                         break;
-                    case R.id.menu_settings:
+                    case R.id.menu_list:
                         fragment = new ListaFragment();
                         break;
                 }

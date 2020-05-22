@@ -29,12 +29,17 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Actividad que permitirá al usuario cambiar la
+ * configuración de su perfil.
+ */
+
 public class EditProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
     private FirebaseUser fUser;
-    private StorageReference storageReference;
+    private StorageReference sReference;
 
     private CircleImageView civAvatarConfig;
 
@@ -44,20 +49,25 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Button btnSave;
 
+    private String sName;
+    private String sEmail;
+    private String sPhone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        // Obtengo los datos pasados desde la actividad anterior para posteriormente mostrarlos.
         Intent data = getIntent();
-        final String name = data.getStringExtra("nombre");
-        String email = data.getStringExtra("email");
-        String phone = data.getStringExtra("telefono");
+        sName = data.getStringExtra("name");
+        sEmail = data.getStringExtra("email");
+        sPhone = data.getStringExtra("phone");
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         fUser = fAuth.getCurrentUser();
-        storageReference = FirebaseStorage.getInstance().getReference();
+        sReference = FirebaseStorage.getInstance().getReference();
 
         civAvatarConfig = findViewById(R.id.civAvatarConfig);
 
@@ -67,9 +77,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         btnSave = findViewById(R.id.btnSave);
 
-        writeCurrentInformation(name, email, phone);
+        // Escribo la información obtenida desde la otra actividad en los EditText.
+        writeCurrentInformation(sName, sEmail, sPhone);
 
-        final StorageReference profileReference = storageReference.child("users/"+ fAuth.getCurrentUser().getUid() +"/profile.jpg");
+        // Utilizado en la actividad anterior, descarga la imagen desde el Storage
+        // y la muestra en el ImageView.
+        final StorageReference profileReference = sReference.child("users/"+ fAuth.getCurrentUser().getUid() +"/profile.jpg");
         profileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -77,11 +90,13 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        // Al pulsar sobre la imagen el usuario tiene acceso a su galería de imagenes para elegir la
+        // que quiera.
         civAvatarConfig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EditProfileActivity.this, "Cambiar foto perfil", Toast.LENGTH_SHORT).show();
-
+                // Mediante un intent accedemos a la galería de imagenes y lo iniciamos con startActivityForResult() para
+                // posteriormete hacer uso del metodo onActivityResult();
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent, 1000);
             }
@@ -122,6 +137,13 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Activamos esta actividad al intentar cambiar la imagen de perfil, hará unas comprobaciones y
+     * lo que hará es subirá la imagen que seleccionemos a FirebaseStorage mediante otro metodo.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,14 +151,18 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == 1000) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri imageURI = data.getData();
-                uploadImageToFirebase(imageURI);
+                uploadImageToStorage(imageURI);
             }
         }
 
     }
 
-    private void uploadImageToFirebase(Uri imageURI) {
-        final StorageReference fileReference = storageReference.child("users/"+ fAuth.getCurrentUser().getUid()+"/profile.jpg");
+    /**
+     * Metodo que permite subir imagenes a nuestro Firebase Storage.
+     * @param imageURI
+     */
+    private void uploadImageToStorage(Uri imageURI) {
+        final StorageReference fileReference = sReference.child("users/"+ fAuth.getCurrentUser().getUid()+"/profile.jpg");
         fileReference.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -155,6 +181,12 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Metodo que rellena con la información actual del usuario los EditText.
+     * @param name
+     * @param email
+     * @param phone
+     */
     public void writeCurrentInformation(String name, String email, String phone) {
         etNameConfig.setText(name);
         etEmailConfig.setText(email);

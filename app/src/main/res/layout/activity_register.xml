@@ -8,7 +8,7 @@
     tools:context=".RegisterActivity">
 
     <EditText
-        android:id="@+id/etTelefono"
+        android:id="@+id/etPhoneRegister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorGrey"
@@ -50,7 +50,7 @@
         app:layout_constraintVertical_bias="0.782" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarRegister"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         app:layout_constraintVertical_bias="0.96" />
 
     <TextView
-        android:id="@+id/tvLoginButton"
+        android:id="@+id/btnLoginSwap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ya tengo una cuenta"
@@ -90,7 +90,7 @@
         app:layout_constraintVertical_bias="0.144" />
 
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/etNameRegister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorGrey"
@@ -105,7 +105,7 @@
         app:layout_constraintVertical_bias="0.192" />
 
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/etEmailRegister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorGrey"
@@ -147,7 +147,7 @@
         app:layout_constraintVertical_bias="0.534" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etPasswordRegister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorGrey"

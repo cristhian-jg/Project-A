@@ -15,118 +15,144 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Clase que permite registrar nuevos usuarios y guardarlos
+ * en la base de datos de Firebase.
+ */
+
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    private EditText etName, etEmail, etTelefono, etPassword, etPasswordConfirmation;
-    private Button btnRegister;
-    private TextView tvLoginButton;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore db;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fFirestore;
 
     private ProgressBar progressBar;
 
-    private String name, email, password, passwordConfirmation, telefono;
+    private TextView btnLoginSwap;
+    private Button btnRegister;
+
+    private EditText etName;
+    private EditText etEmail;
+    private EditText etPhone;
+    private EditText etPassword;
+    private EditText etPasswordConfirmation;
+
+    private String sName;
+    private String sEmail;
+    private String sPhone;
+    private String sPassword;
+    private String sPasswordConfirmation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+        fFirestore = FirebaseFirestore.getInstance();
 
-        etName = findViewById(R.id.etName);
-        etEmail = findViewById(R.id.etEmail);
-        etTelefono = findViewById(R.id.etTelefono);
-        etPassword = findViewById(R.id.etPassword);
+        etName = findViewById(R.id.etNameRegister);
+        etEmail = findViewById(R.id.etEmailRegister);
+        etPhone = findViewById(R.id.etPhoneRegister);
+        etPassword = findViewById(R.id.etPasswordRegister);
         etPasswordConfirmation = findViewById(R.id.etPasswordConfirmation);
 
         btnRegister = findViewById(R.id.btnRegister);
+        btnLoginSwap = findViewById(R.id.btnLoginSwap);
 
-        tvLoginButton = findViewById(R.id.tvLoginButton);
+        progressBar = findViewById(R.id.progressBarRegister);
 
-        progressBar = findViewById(R.id.progressBar);
-
+        // Al pulsar sobre "REGISTRARSE" registra al nuevo usuario y lo almacena en Firebase.
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = etName.getText().toString().trim();
-                email = etEmail.getText().toString().trim();
-                password = etPassword.getText().toString().trim();
-                passwordConfirmation = etPasswordConfirmation.getText().toString().trim();
-                telefono = etTelefono.getText().toString().trim();
 
-                if (TextUtils.isEmpty(email)) {
+                // Almaceno lo que ha ingresado el usuario en strings para poder
+                // hacer posteriormente comprobaciones.
+                sName = etName.getText().toString().trim();
+                sEmail = etEmail.getText().toString().trim();
+                sPassword = etPassword.getText().toString().trim();
+                sPasswordConfirmation = etPasswordConfirmation.getText().toString().trim();
+                sPhone = etPhone.getText().toString().trim();
+
+                if (TextUtils.isEmpty(sEmail)) {
                     etEmail.setError("Es necesario ingresar un correo electrónico.");
                     return;
                 }
 
-                if (TextUtils.isEmpty(password)) {
+                if (TextUtils.isEmpty(sPassword)) {
                     etPassword.setError("Es necesario ingresar una contraseña.");
                     return;
                 }
 
-                if (TextUtils.isEmpty(passwordConfirmation)) {
+                if (TextUtils.isEmpty(sPasswordConfirmation)) {
                     etPasswordConfirmation.setError("Es necesario confirmar la contraseña.");
                 }
 
-                if (password.length() < 6) {
+                if (sPassword.length() < 6) {
                     etPassword.setError("La contraseña debe contener más de 6 caracteres.");
                     return;
                 }
 
-                if (!password.equals(passwordConfirmation)) {
+                if (!sPassword.equals(sPasswordConfirmation)) {
                     etPasswordConfirmation.setError("La contraseñas no coinciden.");
                     return;
                 }
 
+                // Si no se incumple ninguna de las condiciones anteriores se muestra la progressBar
+                // que hasta ahora ha estado oculta.
                 progressBar.setVisibility(View.VISIBLE);
 
-                firebaseAuth.createUserWithEmailAndPassword(email, password)
+                // Mediante la instancia de Firebase Authentication creo un nuevo usuario con su
+                // email y contraseña, y al completarse esta acción ejecuta lo siguiente.
+                fAuth.createUserWithEmailAndPassword(sEmail, sPassword)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                // Si la tarea ha sido exitosa obtendrá el UID del usuario actual
+                                // y añadirlo a la colección "Users" de Firestore, además de referenciarlo.
                                 if (task.isSuccessful()) {
-                                    String userID = firebaseAuth.getCurrentUser().getUid();
-                                    DocumentReference documentReference = db.collection("users").document(userID);
+                                    String userID = fAuth.getCurrentUser().getUid();
+                                    DocumentReference documentReference =
+                                            fFirestore.collection("users").document(userID);
 
+                                    // Con el usuario referenciado creo un HashMap para guardar la
+                                    // información del usuario actual.
                                     Map<String, Object> map = new HashMap<>();
-                                    map.put("name", name);
-                                    map.put("email", email);
-                                    map.put("telefono", telefono);
-                                    map.put("password", password);
+                                    map.put("name", sName);
+                                    map.put("email", sEmail);
+                                    map.put("phone", sPhone);
+                                    map.put("password", sPassword);
 
                                     documentReference.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "onSuccess: Se ha guradado el perfil " +
+                                            Log.d(TAG, "onSuccess: Se ha guardado el perfil " +
                                                     "en la base de datos.");
                                         }
                                     });
 
+                                    // Si ha ido bien se mostrará el siguiente mensaje y se
+                                    // iniciará la actividad principal.
                                     Toast.makeText(RegisterActivity.this, "Usuario creado correctamente.",
                                             Toast.LENGTH_SHORT).show();
-
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 } else {
-                                    Toast.makeText(RegisterActivity.this, "Error has ocurred: " +
-                                            task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    // En caso de que algo vaya mal mostrará un mensaje de error
+                                    // y retirará/quitará la barra de progreso.
+                                    Toast.makeText(RegisterActivity.this, task.getException().getMessage(),
+                                            Toast.LENGTH_SHORT).show();
                                     progressBar.setVisibility(View.GONE);
                                 }
                             }
@@ -134,10 +160,15 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        tvLoginButton.setOnClickListener(new View.OnClickListener() {
+        // Si el usuario ya tiene una cuenta podrá cambiar a la ventana de
+        // login pulsando en este botón.
+        btnLoginSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                // Finalizo esta actividad y arranco la actividad de Login pero limpiando las
+                // actividades anteriores, pasa a estar primero en la pila de actividades.
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                 finish();
             }
         });

@@ -1,13 +1,11 @@
 package com.example.projecta;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
@@ -25,90 +23,106 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
-import java.util.concurrent.Executor;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragmento que muestra la información del usuario actualmente conectado, además de
+ * permiterle ajustar su perfil.
  */
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseFirestore db;
-    private StorageReference storageReference;
+    private static final String TAG = "ProfileFragment";
 
-    private Button btnSignOut, btnResetPassword, btnChangeProfile;
-    private TextView tvNombre, tvEmail, tvTelefono;
-    private CircleImageView ivProfile;
+    private FirebaseAuth fAuth;
+    private FirebaseFirestore fFirestore;
+    private FirebaseUser fUser;
+    private StorageReference sReference;
 
-    private View fragmentView;
-    private FirebaseUser user;
-    private String userID;
+    private Button btnSignOut;
+    private Button btnResetPassword;
+    private Button btnChangeProfile;
+
+    private TextView tvName;
+    private TextView tvEmail;
+    private TextView tvPhone;
+
+    private CircleImageView civAvatar;
+
+    private View v;
+    private String sUserID;
 
     public ProfileFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        fragmentView = inflater.inflate(R.layout.fragment_profile, container, false);
+        v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        btnSignOut = fragmentView.findViewById(R.id.btnSignOut);
-        btnResetPassword = fragmentView.findViewById(R.id.btnResetPassword);
-        btnChangeProfile = fragmentView.findViewById(R.id.btnChangeProfileImage);
+        btnSignOut = v.findViewById(R.id.btnSignOut);
+        btnResetPassword = v.findViewById(R.id.btnResetPassword);
+        btnChangeProfile = v.findViewById(R.id.btnChangeProfile);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        storageReference = FirebaseStorage.getInstance().getReference();
+        fAuth = FirebaseAuth.getInstance();
+        fFirestore = FirebaseFirestore.getInstance();
+        fUser = fAuth.getCurrentUser();
+        sReference = FirebaseStorage.getInstance().getReference();
 
-        userID = firebaseAuth.getCurrentUser().getUid();
+        sUserID = fAuth.getCurrentUser().getUid();
 
-        tvNombre = fragmentView.findViewById(R.id.tvNombre);
-        tvEmail = fragmentView.findViewById(R.id.tvEmail);
-        tvTelefono = fragmentView.findViewById(R.id.tvTelefono);
+        tvName = v.findViewById(R.id.tvName);
+        tvEmail = v.findViewById(R.id.tvEmail);
+        tvPhone = v.findViewById(R.id.tvPhone);
 
-        ivProfile = fragmentView.findViewById(R.id.civAvatarConfig);
+        civAvatar = v.findViewById(R.id.civAvatar);
 
-        final StorageReference profileReference = storageReference.child("users/"+ firebaseAuth.getCurrentUser().getUid() +"/profile.jpg");
+        // Mediante Firebase Storage trabajo con las fotos de perfil, tengo una base de datos
+        // de imagenes donde cada usuario tiene asignada su foto de perfil, anteriormente todos
+        // los usuarios tenían la misma imagen, pero eso lo he solucionado almacenando una diferente en diferentes carpetas
+        // para cada usuario referenciado mediante su UID.
+        final StorageReference profileReference = sReference.child("users/"+ fAuth.getCurrentUser().getUid() +"/profile.jpg");
+
+        // Descarga la imagen de Firebase y la carga en el correspondiente ImageView. (Utilizo CircleImageView así que automaticamente
+        // ) convertirá que se seleccione en un circulo y no se descuadrará.
         profileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(ivProfile);
+                Picasso.get().load(uri).into(civAvatar);
             }
         });
 
-        DocumentReference documentReference = db.collection("users").document(userID);
+        // Mediante Firebase Firestore obtengo la información del usuario actual y
+        // los muestro en los pertinentes TextView
+        DocumentReference documentReference = fFirestore.collection("users").document(sUserID);
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                tvTelefono.setText(documentSnapshot.getString("telefono"));
-                tvNombre.setText(documentSnapshot.getString("name"));
+                tvPhone.setText(documentSnapshot.getString("telefono"));
+                tvName.setText(documentSnapshot.getString("name"));
                 tvEmail.setText(documentSnapshot.getString("email"));
             }
         });
 
+        // Mediante este botón el usuario podrá cerrar su sesión, mientras no cierre la sesión
+        // el usuario permanecerá conectado aunque cierre la aplicación.
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth.signOut();
+                fAuth.signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                 getActivity().finish();
             }
         });
 
+        // La misma opción vista en la ventana de Login, por si el usuario quiere cambiar su
+        // contraseña de manera voluntaria.
         btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +138,7 @@ public class ProfileFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         String newPassword = resetPassword.getText().toString();
-                        user.updatePassword(newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        fUser.updatePassword(newPassword).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(getContext(), "Contraseña cambiada correctamente.", Toast.LENGTH_SHORT).show();
@@ -148,22 +162,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // Abre una nueva actividad donde podremos cambiar la información de la cuenta, necesito
+        // pasarle la información actual mediante Intent para mostrarla en los EditText de dicha actividad.
         btnChangeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent(v.getContext(), EditProfileActivity.class);
-                i.putExtra("nombre", tvNombre.getText().toString());
+                i.putExtra("name", tvName.getText().toString());
                 i.putExtra("email", tvEmail.getText().toString());
-                i.putExtra("telefono", tvTelefono.getText().toString());
-
+                i.putExtra("phone", tvPhone.getText().toString());
                 startActivity(i);
-                //Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                //startActivityForResult(openGalleryIntent, 1000);
             }
         });
 
-        return fragmentView;
+        return v;
     }
 
 }
