@@ -3,13 +3,14 @@ package com.example.projecta.loginin;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.projecta.R;
 import com.example.projecta.loginin.fragments.HomeFragment;
-import com.example.projecta.loginin.fragments.NavegadorFragment;
+import com.example.projecta.loginin.fragments.NavegatorFragment;
 import com.example.projecta.loginin.fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = null;
-
                 switch (menuItem.getItemId()) {
                     case R.id.menu_home:
                         fragment = new HomeFragment();
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new ProfileFragment();
                         break;
                     case R.id.menu_navegation:
-                        fragment = new NavegadorFragment();
+                        fragment = new NavegatorFragment();
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();

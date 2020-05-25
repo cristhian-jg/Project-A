@@ -9,4 +9,5 @@
     <color name="secondary_text">#757575</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGrey">#BDBDBD</color>
+    <color name="transparent">#80000000</color>
 </resources>
