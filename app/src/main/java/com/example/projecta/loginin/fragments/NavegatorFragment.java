@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 /**
@@ -37,7 +38,7 @@ public class NavegatorFragment extends Fragment implements OnMapReadyCallback, G
 
     private Marker mMarker;
 
-    private ImageView btnAddUbication;
+    private FloatingActionButton floatingActionButton;
 
     public NavegatorFragment() {
         // Required empty public constructor
@@ -48,11 +49,11 @@ public class NavegatorFragment extends Fragment implements OnMapReadyCallback, G
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_navegator, container, false);
+        mView = inflater.inflate(R.layout.fragment_navigator, container, false);
 
-        btnAddUbication = mView.findViewById(R.id.btnAddUbication);
+        floatingActionButton = mView.findViewById(R.id.floatingActionButton);
 
-        btnAddUbication.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog();
