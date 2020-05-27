@@ -10,35 +10,35 @@ IES N.º 1 XÁBIA 2019/2020
 
 INDICE
 
-1. INTRODUCCIÓN ……………………………………………………………………………… 3
+1. INTRODUCCIÓN
 
-1.1 ABSTRACT …………………………………………………………………………… 3
+1.1 ABSTRACT 
 
-1.2 MÓDULOS IMPLICADOS …………………………………………………………... 4
+1.2 MÓDULOS IMPLICADOS
 
-1.3 TIPO DE PROYECTO ……………………………………………………………….. 5
+1.3 TIPO DE PROYECTO
 
-1.4 DESCRIPCIÓN DEL PROYECTO …………………………………………………. 6
+1.4 DESCRIPCIÓN DEL PROYECTO
 
-2. MEMORIA EXPLICATIVA …………………………………………………………………….. 7
+2. MEMORIA EXPLICATIVA
 
-2.1 DESCRIPCIÓN TÉCNICA ………………………………………………………….. X
+2.1 DESCRIPCIÓN TÉCNICA
 
-2.1.1 REQUISITOS MINIMOS ………………………………………………….. X
+2.1.1 REQUISITOS MINIMOS
 
-2.1.2 HERRAMIENTAS UTILIZADAS PARA EL DESAROLLO ……………... X
+2.1.2 HERRAMIENTAS UTILIZADAS PARA EL DESAROLLO
 
-2.2 FUNCIONAMIENTO Y DESARROLLO DEL SISTEMA …………………………. X
+2.2 FUNCIONAMIENTO Y DESARROLLO DEL SISTEMA
 
-2.2.1 WIREFRAME ………………………………………………………………. X
+2.2.1 WIREFRAME
 
-2.2.2 SPLASH SCREEN ………………………………………………………… X
+2.2.2 SPLASH SCREEN 
 
-2.2.3 REGISTRO ………………………………………………………………… X
+2.2.3 REGISTRO
 
-2.2.4 LOGIN ………………………………………………………………………. X
+2.2.4 LOGIN 
 
-2.2.5 PANTALLA PRINCIPAL …………………………………………………… X
+2.2.5 PANTALLA PRINCIPAL 
 
 2.3 CALCULOS
 
@@ -90,9 +90,7 @@ Se podría decir que este módulo ha sido el más clave, ya que ha servido para 
 
 Este módulo ha sido de gran utilidad e importancia para desarrollar la aplicación, ya que los conceptos aprendidos se están utilizando constantemente dado que tenemos que trabajar sobre un entorno para el desarrollo de una aplicación móvil.
 
-**1.2.3 ACCESO A DATOS / BASES DE DATOS**
-
-****
+1.2.3 ACCESO A DATOS / BASES DE DATOS
 
 Aunque no se aplican directamente los programas trabajados durante el curso, ha facilitado el aprendizaje de herramientas cómo Firebase Storage, Firebase Realtime Database y Firebase CloudStore dado que trabaja con colecciones de datos, tema que hemos estado viendo durante el curso.
 
@@ -106,7 +104,7 @@ He aplicado algunos conocimientos aprendidos en esta asignatura, se me enseñaro
 
 1.3 TIPO DE PROYECTO
 
-**Ubishot **es** **un proyecto técnico, que servirá de utilidad y orientación para el usuario, ya que lo que presenta a primera vista es una herramienta para localizar diferentes zonas turisticas o muy pintorescas donde una persona podría tomar una foto, pero no más lejos de la realidad lo que se intenta además es avivar ese espiruto fotografíco que cada uno de nosotros tenemos dentro.
+Ubishot es un proyecto técnico, que servirá de utilidad y orientación para el usuario, ya que lo que presenta a primera vista es una herramienta para localizar diferentes zonas turisticas o muy pintorescas donde una persona podría tomar una foto, pero no más lejos de la realidad lo que se intenta además es avivar ese espiruto fotografíco que cada uno de nosotros tenemos dentro.
 
 Seguro que en más de una ocasión has querido tomarte una muy buena foto pero no sabías donde ni cómo, por lo que uno de los objetivos de Ubishot es ayudarte con eso, dandote consejos a la hora de tomar la foto y geolocalizando zonas a tu alrededor. Será una aplicación gratuita y de uso publico para cualquier usuario de Android (por el momento), por lo que podrá descargarse mediante Play Store sin aplicar ningún coste, además de que no contendrá anuncios ni ningún tipo de suscribción. Es una aplicación desarrollada completamente por mí, con el apoyo de mi tutor de proyecto Germán Gascón.
 
@@ -114,9 +112,7 @@ Seguro que en más de una ocasión has querido tomarte una muy buena foto pero n
 
 La fotografía es algo que forma parte del día a día de las personas, es una manera de grabar momentos pasados, por ello me he puesto en marcha con este proyecto en el que se intenta avivar esa llama fotográfica con un poco de apoyo, facilitando al usuario lugares dónde hacer la fotografía, cómo y cuando.
 
-******
-
-***Imagen 1. Pantallas principales de la aplicación ****(Por añadir)***
+Imagen 1. Pantallas principales de la aplicación
 
 La aplicación empieza, como es común hoy en día, con una pantalla de inicio de sesión en la cual el usuario podrá a su vez crear una nueva cuenta en caso de ser un primerizo. Tambien se incluye una opción de recuperar la contraseña en caso de que el usuario no pueda acceder a su cuenta por que se le ha olvidado la contraseña.
 
@@ -124,9 +120,7 @@ Imagen 2. Dialogo para recurperar la contraseña
 
 Una vez el usuario se haya logueado o registrado será redirigido a una nueva pantalla con un menú inferior que está dividio en 3 partes: El *Inicio* que mostrará un listado de las ubicaciones añadidas recientemente por los usuarios, el *Perfil *que mostrará la información del usuario una vez registrado, y donde podrá configurar su perfil, añadiendo una foto de perfil y cambiando su información, el *Navegador* es donde se mostrará el mapa de las zonas fotograficas, en este mapa habrá marcadores a los cuales al presionar sobre ellos redigirá al usuario a una nueva pantalla con la información de dicha ubicación/plaza fotografica, además en esta pantalla los usuarios podrán añadir nuevos puntos fotograficos.
 
-Utilizaré la plataforma Firebase durante todo el proceso lo cual falicita mucho la implemtación de todos estas funcionalidades ya que incluye servicios cómo **Firebase Auth **lo cual facilitará la autenticación y registro de usuarios, así cómo **Firebase CloudStore** que ayudará a almacenar la información de todos los usuarios y **Firebase Storage** para un mejor almacenamiento de imágenes.
-
-****
+Utilizaré la plataforma Firebase durante todo el proceso lo cual falicita mucho la implemtación de todos estas funcionalidades ya que incluye servicios cómo **Firebase Auth** lo cual facilitará la autenticación y registro de usuarios, así cómo **Firebase CloudStore** que ayudará a almacenar la información de todos los usuarios y **Firebase Storage** para un mejor almacenamiento de imágenes.
 
 **2. MEMORIA EXPLICATIVA**
 
